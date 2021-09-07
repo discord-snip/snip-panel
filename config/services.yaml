@@ -4,6 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    discord.oauth2_client_secret: '%env(OAUTH2_CLIENT_SECRET)%'
+    discord.role_id: '%env(ROLE_ID)%'
+    discord.guild_id: '%env(GUILD_ID)%'
 
 services:
     # default configuration for services in *this* file
