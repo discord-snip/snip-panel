@@ -1,0 +1,16 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect via SSH
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cd ${{ secrets.PATH }}
+            git pull && composer update
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          pass: ${{ secrets.PASS }}
