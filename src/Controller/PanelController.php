@@ -68,12 +68,14 @@ class PanelController extends AbstractController
 
             if ($contributor->hasAccess) {
                 return $this->render('panel/index.html.twig', [
-                    'controller_name' => $user->username,
+                    'username' => $user->username,
+                    'discriminator' => $user->discriminator,
                 ]);
             }
 
-            return $this->render('panel/index.html.twig', [
-                'controller_name' => 'PanelController',
+            return $this->render('panel/forbidden.html.twig', [
+                'username' => $user->username,
+                'discriminator' => $user->discriminator,
             ]);
         }
 
