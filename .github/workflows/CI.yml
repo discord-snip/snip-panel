@@ -10,7 +10,7 @@ jobs:
         with:
           command: |
             cd ${{ secrets.PATH }}
-            git pull && composer update
+            git restore composer.lock && git pull && composer update
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           pass: ${{ secrets.PASS }}
