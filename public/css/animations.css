@@ -1,0 +1,58 @@
+@keyframes logo {
+    0% {
+        opacity: 0;
+        height: 20em;
+    }
+
+    20% {
+        opacity: 1;
+        height: 20em;
+    }
+
+    40% {
+        height: 10em;
+    }
+}
+
+@keyframes title {
+    0% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 0;
+    }
+
+    60% {
+        opacity: 1;
+    }
+}
+
+@keyframes subtitle {
+    0% {
+        opacity: 0;
+    }
+
+    60% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 1;
+    }
+}
+
+@keyframes main {
+
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

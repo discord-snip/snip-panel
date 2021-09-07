@@ -1,0 +1,259 @@
+@import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+@import url(https://use.fontawesome.com/releases/v5.14.0/css/all.css);
+@import url(animations.css);
+
+:root {
+    --background: #36393f;
+    --snippet-background: #2f3136;
+    --snippet-border: #202225;
+    --background-profile: #292b2f;
+    --color: #ffffff;
+    --color-dimmed: #a0a0a0;
+    --discord: #5865f2;
+    --discord-dark: #4752c4;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    color: var(--color);
+    font-family: "Open Sans", sans-serif;
+    background-color: var(--background);
+}
+
+a {
+    color: currentColor;
+}
+
+td, th {
+    padding: 1em;
+}
+
+tr:nth-child(even) {
+    background-color: var(--snippet-background);
+}
+
+tr:hover {
+    background-color: var(--snippet-border);
+}
+
+i.fab.fa-discord {
+    font-size: 2em;
+    margin-right: 0.5em;
+}
+
+.discriminator {
+    color: var(--color-dimmed)
+}
+
+nav {
+    background-color: var(--snippet-background);
+    text-align: right;
+    padding: 1em;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+nav > a,
+.discord {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    height: 2em;
+    padding: 10px 20px;
+}
+
+nav > a:first-child {
+    float: left;
+    font-size: 2em;
+    height: 1em;
+}
+
+nav > a > img:first-child {
+    margin-right: 0.5em;
+}
+
+nav > a > img {
+    height: 100%;
+}
+
+nav > a > img:last-child {
+    margin-left: 0.5em;
+}
+
+img.avatar {
+    border-radius: 100%;
+}
+
+.discord {
+    background-color: var(--discord);
+}
+
+.discord:hover {
+    background-color: var(--discord-dark);
+}
+
+header,
+header + main,
+footer {
+    margin: 15em 1em;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+header:not(.no-animation) > img {
+    animation-name: logo;
+}
+
+header > img {
+    animation-duration: 5s;
+    height: 10em;
+}
+
+header > p {
+    width: 100%;
+    animation-duration: 5s;
+}
+
+header:not(.no-animation) > p:first-of-type {
+    animation-name: title;
+}
+
+header > p:first-of-type {
+    font-size: 3em;
+    margin: 0;
+}
+
+header:not(.no-animation) > p:last-of-type {
+    animation-name: subtitle;
+}
+
+header > p:last-of-type {
+    color: var(--color-dimmed);
+}
+
+header + main {
+    animation-name: main;
+}
+
+header + main {
+    animation-duration: 5s;
+}
+
+header + main > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+header + main > div:not(:first-child) {
+    margin-top: 10em;
+}
+
+header + main > div:nth-child(odd) > img {
+    margin-right: 4em;
+}
+
+header + main > div:nth-child(even) > img {
+    margin-left: 4em;
+}
+
+header + main > div > p {
+    width: 60%;
+}
+
+header + main > div > div {
+    text-align: left;
+}
+
+header + main > div p:first-of-type {
+    font-size: 2em;
+}
+
+.contributors {
+    width: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.contributors > .contributor {
+    display: inline-flex;
+    width: 30%;
+    align-items: center;
+    height: 5em;
+}
+
+.contributors > .contributor:hover {
+    background-color: var(--background-profile);
+}
+
+.contributors > .contributor > img {
+    height: 3em;
+    border-radius: 100%;
+    margin: 0 2em;
+}
+
+.contributors > .contributor > div {
+    display: inline-flex;
+    justify-content: center;
+}
+
+main {
+    margin: 1em;
+    min-height: 90%;
+}
+
+footer {
+    margin: 0;
+    padding: 5em 1em;
+    background-color: var(--snippet-border);
+}
+
+@media screen and (max-width: 767px) {
+    .desktop {
+        display: none;
+    }
+
+    header + main > div {
+        flex-wrap: wrap;
+    }
+
+    header + main > div > img {
+        width: 100%;
+        margin: 0 !important;
+    }
+
+    header + main > div > div > p {
+        text-align: center;
+    }
+
+    header + main > div > p {
+        width: 100%;
+    }
+
+    .contributors {
+        width: 100%;
+    }
+
+    .contributors > .contributor {
+        width: 90%;
+    }
+
+    .contributors > .contributor:hover {
+        background-color: unset;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .mobile {
+        display: none;
+    }
+}
