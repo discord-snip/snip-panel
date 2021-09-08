@@ -17,7 +17,7 @@
         </div>
 
         <div class="p-4 mb-4">
-            <p class="text-center mt-6">Logged in as {{ username }}<span class="text-muted">#{{ discriminator }}</span>.
+            <p class="text-center mt-6">Logged in as {{ user.username }}<span class="text-muted">#{{ user.discriminator }}</span>.
                 It's not You?</p>
             <p class="text-center"><a class="btn btn-primary" href="{{ path('logout') }}">Logout!</a></p>
         </div>

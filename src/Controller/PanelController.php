@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\SnippetRepository;
 use App\Service\AuthenticationService;
 use App\Service\DiscordService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,14 +30,18 @@ class PanelController extends AbstractController
 
     private RequestStack $requestStack;
 
+    private SnippetRepository $snippetRepository;
+
     public function __construct(
         DiscordService $discordService,
         AuthenticationService $authenticationService,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        SnippetRepository $snippetRepository
     ) {
         $this->discordService = $discordService;
         $this->authenticationService = $authenticationService;
         $this->requestStack = $requestStack;
+        $this->snippetRepository = $snippetRepository;
     }
 
     #[Route('/panel', name: 'panel')]
@@ -72,15 +77,16 @@ class PanelController extends AbstractController
             }
 
             if ($contributor['hasAccess']) {
+                $snippets = $this->snippetRepository->findAll();
+
                 return $this->render('panel/index.html.twig', [
-                    'username' => $user['username'],
-                    'discriminator' => $user['discriminator'],
+                    'user' => $user,
+                    'snippets' => $snippets,
                 ]);
             }
 
             return $this->render('panel/forbidden.html.twig', [
-                'username' => $user['username'],
-                'discriminator' => $user['discriminator'],
+                'user' => $user,
             ]);
         }
 
