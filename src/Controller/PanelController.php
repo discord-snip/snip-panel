@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Snippet;
+use App\Form\SnippetType;
 use App\Repository\SnippetRepository;
 use App\Service\AuthenticationService;
 use App\Service\DiscordService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,17 +33,21 @@ class PanelController extends AbstractController
 
     private RequestStack $requestStack;
 
+    private EntityManagerInterface $entityManager;
+
     private SnippetRepository $snippetRepository;
 
     public function __construct(
         DiscordService $discordService,
         AuthenticationService $authenticationService,
         RequestStack $requestStack,
+        EntityManagerInterface $entityManager,
         SnippetRepository $snippetRepository
     ) {
         $this->discordService = $discordService;
         $this->authenticationService = $authenticationService;
         $this->requestStack = $requestStack;
+        $this->entityManager = $entityManager;
         $this->snippetRepository = $snippetRepository;
     }
 
@@ -99,6 +106,35 @@ class PanelController extends AbstractController
         ];
 
         return $this->redirect(self::OAUTH2_URL . '?' . http_build_query($params));
+    }
+
+    #[Route('/panel/{snippet}', name: 'details')]
+    public function details(Snippet $snippet): Response
+    {
+        return $this->render('panel/details.html.twig', [
+            'snippet' => $snippet,
+        ]);
+    }
+
+    #[Route('/panel/{snippet}/edit', name: 'edit')]
+    public function edit(Snippet $snippet, Request $request): Response
+    {
+        $form = $this->createForm(SnippetType::class, $snippet);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+            $this->addFlash('success', 'Snippet has been updated!');
+
+            return $this->redirectToRoute('details', [
+                'snippet' => $snippet->getId(),
+            ]);
+        }
+
+        return $this->render('panel/edit.html.twig', [
+            'snippet' => $snippet,
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/panel/logout', name: 'logout')]
