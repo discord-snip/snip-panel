@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [master]
+    branches: [ master ]
   pull_request:
-    branches: [master]
+    branches: [ master ]
 
 jobs:
   deploy:
@@ -14,7 +14,7 @@ jobs:
         with:
           command: |
             cd ${{ secrets.PATH }}
-            git restore composer.lock && git pull && composer install --no-dev --optimize-autoloader
+            git restore composer.lock && git pull && composer install --no-dev --optimize-autoloader && bin/console doctrine:migration:migrate --no-interaction
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           pass: ${{ secrets.PASS }}
