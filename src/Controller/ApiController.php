@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Entity\Snippet;
 use App\Repository\LanguageRepository;
 use App\Repository\SnippetRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
     private LanguageRepository $languageRepository;
+
     private SnippetRepository $snippetRepository;
 
     public function __construct(LanguageRepository $languageRepository, SnippetRepository $snippetRepository)
@@ -25,10 +27,10 @@ class ApiController extends AbstractController
     {
         $snippet = $this->snippetRepository->findOneBy([
             'language' => $this->languageRepository->findOneByName($language),
-            'name' => $name
+            'name' => $name,
         ]);
 
-        if (!$snippet) {
+        if (! $snippet) {
             throw $this->createNotFoundException('This snippet does not exist');
         }
 

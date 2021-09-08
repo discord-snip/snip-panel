@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Language;
@@ -22,7 +24,7 @@ class LanguageRepository extends ServiceEntityRepository
     public function findOneByName(string $name): Language
     {
         return $this->findOneBy([
-            'name' => $name
+            'name' => $name,
         ]);
     }
 

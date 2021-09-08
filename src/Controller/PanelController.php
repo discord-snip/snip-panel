@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Service\AuthenticationService;
@@ -14,18 +16,24 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class PanelController extends AbstractController
 {
     private const OAUTH2_CLIENT_ID = '866013874109284402';
+
     private const OAUTH2_URL = 'https://discordapp.com/api/oauth2/authorize';
+
     private const OAUTH2_TOKEN_URL = 'https://discordapp.com/api/oauth2/token';
+
     private const DISCORD_API_URL = 'https://discordapp.com/api';
 
     private DiscordService $discordService;
+
     private AuthenticationService $authenticationService;
+
     private RequestStack $requestStack;
 
-    public function __construct(DiscordService        $discordService,
-                                AuthenticationService $authenticationService,
-                                RequestStack          $requestStack)
-    {
+    public function __construct(
+        DiscordService $discordService,
+        AuthenticationService $authenticationService,
+        RequestStack $requestStack
+    ) {
         $this->discordService = $discordService;
         $this->authenticationService = $authenticationService;
         $this->requestStack = $requestStack;
@@ -44,12 +52,13 @@ class PanelController extends AbstractController
                     'client_id' => self::OAUTH2_CLIENT_ID,
                     'client_secret' => $this->getParameter('discord.oauth2_client_secret'),
                     'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'code' => $request->query->get('code')
+                    'code' => $request->query->get('code'),
                 ]);
             } catch (\JsonException $e) {
                 die($e->getMessage());
             }
-            $session->set('access_token', $token->access_token);
+
+            $session->set('access_token', $token['access_token']);
 
             return $this->redirectToRoute('panel');
         }
@@ -57,25 +66,21 @@ class PanelController extends AbstractController
         if ($session->get('access_token', false)) {
             try {
                 $user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
-                $contributor = $this->authenticationService->checkPermissions(
-                    $user->id,
-                    $this->getParameter('discord.role_id'),
-                    $this->getParameter('discord.guild_id')
-                );
+                $contributor = $this->authenticationService->checkPermissions($user['id']);
             } catch (\JsonException $e) {
                 die($e->getMessage());
             }
 
-            if ($contributor->hasAccess) {
+            if ($contributor['hasAccess']) {
                 return $this->render('panel/index.html.twig', [
-                    'username' => $user->username,
-                    'discriminator' => $user->discriminator,
+                    'username' => $user['username'],
+                    'discriminator' => $user['discriminator'],
                 ]);
             }
 
             return $this->render('panel/forbidden.html.twig', [
-                'username' => $user->username,
-                'discriminator' => $user->discriminator,
+                'username' => $user['username'],
+                'discriminator' => $user['discriminator'],
             ]);
         }
 
@@ -84,8 +89,9 @@ class PanelController extends AbstractController
             'client_id' => self::OAUTH2_CLIENT_ID,
             'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'response_type' => 'code',
-            'scope' => 'identify'
+            'scope' => 'identify',
         ];
+
         return $this->redirect(self::OAUTH2_URL . '?' . http_build_query($params));
     }
 
@@ -94,6 +100,7 @@ class PanelController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $session->clear();
+
         return $this->redirectToRoute('main');
     }
 }
