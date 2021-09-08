@@ -1,0 +1,17 @@
+name: phpstan
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.0'
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Fix code
+        run: vendor/bin/ecs --fix
+      - name: Static analysis
+        run: php -d memory_limit=1G vendor/bin/phpstan analyze
