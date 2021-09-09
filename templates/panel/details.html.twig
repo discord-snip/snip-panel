@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PanelController!{% endblock %}
+
+{% block body %}
+<div class="container">
+    <script>hljs.highlightAll();</script>
+    <h1><code>{{ snippet.name }}</code> in {{ snippet.language.name }}</h1>
+    <pre><code class="{{ snippet.language.name }}">{{ snippet.code }}</code></pre>
+    <div class="container">
+        <a class="btn btn-outline-primary" href="{{ path('panel') }}">« Back to panel</a>
+        <a class="btn btn-primary" href="{{ path('edit', {'snippet': snippet.id}) }}"><i class="bi bi-pencil"></i> Edit</a>
+    </div>
+</div>
+{% endblock %}
