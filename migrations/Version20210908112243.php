@@ -20,7 +20,6 @@ final class Version20210908112243 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP INDEX IDX_961C8CD582F1BAF4');
         $this->addSql('CREATE TEMPORARY TABLE __temp__snippet AS SELECT id, language_id, name, code FROM snippet');
         $this->addSql('DROP TABLE snippet');
         $this->addSql('CREATE TABLE snippet (id BLOB NOT NULL --(DC2Type:uuid)
