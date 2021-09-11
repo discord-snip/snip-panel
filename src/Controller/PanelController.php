@@ -61,26 +61,6 @@ class PanelController extends AbstractController
     #[Route('/panel', name: 'panel')]
     public function index(Request $request): Response
     {
-        $this->login($request);
-        $snippets = $this->snippetRepository->findAll();
-
-        return $this->render('panel/index.html.twig', [
-            'user' => $this->user,
-            'snippets' => $snippets,
-        ]);
-    }
-
-    #[Route('/panel/logout', name: 'logout')]
-    public function logout(): Response
-    {
-        $session = $this->requestStack->getSession();
-        $session->clear();
-
-        return $this->redirectToRoute('main');
-    }
-
-    public function login(Request $request): Response
-    {
         $session = $this->requestStack->getSession();
         $session->start();
 
@@ -110,11 +90,18 @@ class PanelController extends AbstractController
                 die($e->getMessage());
             }
 
-            if (! $this->contributor['hasAccess']) {
-                return $this->render('panel/forbidden.html.twig', [
+            if ($this->contributor['hasAccess']) {
+                $snippets = $this->snippetRepository->findAll();
+
+                return $this->render('panel/index.html.twig', [
                     'user' => $this->user,
+                    'snippets' => $snippets,
                 ]);
             }
+
+            return $this->render('panel/forbidden.html.twig', [
+                'user' => $this->user,
+            ]);
         }
 
         // Fallback to default action - redirect to Discord Oauth2
@@ -124,5 +111,14 @@ class PanelController extends AbstractController
             'response_type' => 'code',
             'scope' => 'identify',
         ]));
+    }
+
+    #[Route('/panel/logout', name: 'logout')]
+    public function logout(): Response
+    {
+        $session = $this->requestStack->getSession();
+        $session->clear();
+
+        return $this->redirectToRoute('main');
     }
 }
