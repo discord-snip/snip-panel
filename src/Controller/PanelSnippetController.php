@@ -12,17 +12,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PanelSnippetController extends PanelController
 {
-    #[Route('/panel/{snippet}', name: 'details')]
-    public function details(Snippet $snippet): Response
+    #[Route('/panel/snippet/{snippet}', name: 'snippet_details')]
+    public function details(Snippet $snippet, Request $request): Response
     {
-        return $this->render('panel_snippet/index.html.twig', [
-            'snippet' => $snippet,
+        $this->login($request);
+        if ($this->contributor['hasAccess']) {
+            return $this->render('panel_snippet/index.html.twig', [
+                'snippet' => $snippet,
+            ]);
+        }
+
+        return $this->render('panel/forbidden.html.twig', [
+            'user' => $this->user,
         ]);
     }
 
-    #[Route('/panel/{snippet}/edit', name: 'edit_snippet')]
+    #[Route('/panel/snippet/{snippet}/edit', name: 'edit_snippet')]
     public function edit(Snippet $snippet, Request $request): Response
     {
+        $this->login($request);
         $form = $this->createForm(SnippetType::class, $snippet);
 
         $form->handleRequest($request);
@@ -30,7 +38,7 @@ class PanelSnippetController extends PanelController
             $this->entityManager->flush();
             $this->addFlash('success', 'Snippet has been updated!');
 
-            return $this->redirectToRoute('details', [
+            return $this->redirectToRoute('snippet_details', [
                 'snippet' => $snippet->getId(),
             ]);
         }
@@ -41,9 +49,10 @@ class PanelSnippetController extends PanelController
         ]);
     }
 
-    #[Route('/panel/snippet/add', name: 'add_snippet')]
+    #[Route('/panel/snippet/add', name: 'snippet_add')]
     public function add(Request $request): Response
     {
+        $this->login($request);
         $snippet = new Snippet();
         $form = $this->createForm(SnippetType::class, $snippet);
 
@@ -53,7 +62,7 @@ class PanelSnippetController extends PanelController
             $this->entityManager->flush();
             $this->addFlash('success', 'Snippet has been created!');
 
-            return $this->redirectToRoute('details', [
+            return $this->redirectToRoute('snippet_details', [
                 'snippet' => $snippet->getId(),
             ]);
         }
