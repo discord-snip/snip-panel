@@ -13,7 +13,8 @@ class SnippetFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $language = new Language('C');
+        $language = new Language();
+        $language->setName('C');
         $snippet = new Snippet();
         $snippet->setLanguage($language);
         $snippet->setName('helloworld');
@@ -27,7 +28,8 @@ class SnippetFixtures extends Fixture
         $manager->persist($language);
         $manager->persist($snippet);
 
-        $language = new Language('C++');
+        $language = new Language();
+        $language->setName('C++');
         $snippet = new Snippet();
         $snippet->setLanguage($language);
         $snippet->setName('helloworld');
