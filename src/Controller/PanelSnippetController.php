@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PanelSnippetController extends PanelController
 {
-    #[Route('/panel/snippet/{snippet}', name: 'snippet_details')]
+    #[Route('/panel/snippet/{snippet}/details', name: 'snippet_details')]
     public function details(Snippet $snippet, Request $request): Response
     {
         $this->login($request);
