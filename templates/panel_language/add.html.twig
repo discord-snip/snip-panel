@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PanelController!{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Add new language</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success">Create language!</button>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

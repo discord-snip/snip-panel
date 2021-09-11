@@ -24,10 +24,9 @@ class Language
      */
     private string $name;
 
-    public function __construct(string $name)
+    public function __construct()
     {
         $this->id = Uuid::v4();
-        $this->name = $name;
     }
 
     public function getId(): Uuid
