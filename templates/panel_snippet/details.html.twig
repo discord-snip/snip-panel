@@ -7,7 +7,7 @@
         <script>hljs.highlightAll();</script>
         <h1><code>{{ snippet.name }}</code> in {{ snippet.language.name }}</h1>
         <pre><code class="{{ snippet.language.name }}">{{ snippet.code }}</code></pre>
-        <div class="container">
+        <div>
             <a class="btn btn-outline-primary" href="{{ path('panel') }}">Back to panel</a>
             <a class="btn btn-primary" href="{{ path('snippet_edit', {'snippet': snippet.id}) }}">Edit</a>
         </div>
