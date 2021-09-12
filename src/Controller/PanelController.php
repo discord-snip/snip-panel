@@ -64,8 +64,6 @@ class PanelController extends AbstractController
         }
 
         if ($session->get('access_token', false)) {
-            $user = null;
-            $contributor = null;
             try {
                 $user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
                 $contributor = $this->authenticationService->checkPermissions($user['id']);
@@ -74,7 +72,7 @@ class PanelController extends AbstractController
             }
 
             if ($contributor['hasAccess']) {
-                return $this->redirectToRoute('panel_snippet');
+                return $this->redirectToRoute('snippet_panel');
             }
 
             return $this->render('panel/forbidden.html.twig', [
