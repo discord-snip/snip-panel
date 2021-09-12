@@ -6,13 +6,53 @@ namespace App\Controller;
 
 use App\Entity\Language;
 use App\Form\LanguageType;
+use App\Repository\LanguageRepository;
+use App\Service\AuthenticationService;
+use App\Service\DiscordService;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class PanelLanguageController extends PanelController
+class PanelLanguageController extends AbstractController
 {
+    private const OAUTH2_CLIENT_ID = '866013874109284402';
+
+    private const OAUTH2_URL = 'https://discordapp.com/api/oauth2/authorize';
+
+    private const DISCORD_API_URL = 'https://discordapp.com/api';
+
+    private ?array $user = null;
+
+    private ?array $contributor = null;
+
+    private EntityManagerInterface $entityManager;
+
+    private DiscordService $discordService;
+
+    private AuthenticationService $authenticationService;
+
+    private RequestStack $requestStack;
+
+    private LanguageRepository $languageRepository;
+
+    public function __construct(
+        DiscordService $discordService,
+        AuthenticationService $authenticationService,
+        RequestStack $requestStack,
+        EntityManagerInterface $entityManager,
+        LanguageRepository $languageRepository
+    ) {
+        $this->discordService = $discordService;
+        $this->authenticationService = $authenticationService;
+        $this->requestStack = $requestStack;
+        $this->entityManager = $entityManager;
+        $this->languageRepository = $languageRepository;
+    }
+
     #[Route('/panel/languages', name: 'panel_language')]
     public function language(): Response
     {

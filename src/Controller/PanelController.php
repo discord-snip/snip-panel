@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Repository\LanguageRepository;
-use App\Repository\SnippetRepository;
 use App\Service\AuthenticationService;
 use App\Service\DiscordService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,44 +15,28 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PanelController extends AbstractController
 {
-    protected const OAUTH2_CLIENT_ID = '866013874109284402';
+    private const OAUTH2_CLIENT_ID = '866013874109284402';
 
-    protected const OAUTH2_URL = 'https://discordapp.com/api/oauth2/authorize';
+    private const OAUTH2_URL = 'https://discordapp.com/api/oauth2/authorize';
 
-    protected const OAUTH2_TOKEN_URL = 'https://discordapp.com/api/oauth2/token';
+    private const OAUTH2_TOKEN_URL = 'https://discordapp.com/api/oauth2/token';
 
-    protected const DISCORD_API_URL = 'https://discordapp.com/api';
+    private const DISCORD_API_URL = 'https://discordapp.com/api';
 
-    protected ?array $user = null;
+    private DiscordService $discordService;
 
-    protected ?array $contributor = null;
+    private AuthenticationService $authenticationService;
 
-    protected EntityManagerInterface $entityManager;
-
-    protected DiscordService $discordService;
-
-    protected AuthenticationService $authenticationService;
-
-    protected RequestStack $requestStack;
-
-    protected SnippetRepository $snippetRepository;
-
-    protected LanguageRepository $languageRepository;
+    private RequestStack $requestStack;
 
     public function __construct(
         DiscordService $discordService,
         AuthenticationService $authenticationService,
-        RequestStack $requestStack,
-        EntityManagerInterface $entityManager,
-        SnippetRepository $snippetRepository,
-        LanguageRepository $languageRepository
+        RequestStack $requestStack
     ) {
         $this->discordService = $discordService;
         $this->authenticationService = $authenticationService;
         $this->requestStack = $requestStack;
-        $this->entityManager = $entityManager;
-        $this->snippetRepository = $snippetRepository;
-        $this->languageRepository = $languageRepository;
     }
 
     #[Route('/panel', name: 'panel')]
@@ -83,24 +64,21 @@ class PanelController extends AbstractController
         }
 
         if ($session->get('access_token', false)) {
+            $user = null;
+            $contributor = null;
             try {
-                $this->user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
-                $this->contributor = $this->authenticationService->checkPermissions($this->user['id']);
+                $user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
+                $contributor = $this->authenticationService->checkPermissions($user['id']);
             } catch (\JsonException $e) {
                 die($e->getMessage());
             }
 
-            if ($this->contributor['hasAccess']) {
-                $snippets = $this->snippetRepository->findAll();
-
-                return $this->render('panel/index.html.twig', [
-                    'user' => $this->user,
-                    'snippets' => $snippets,
-                ]);
+            if ($contributor['hasAccess']) {
+                return $this->redirectToRoute('panel_snippet');
             }
 
             return $this->render('panel/forbidden.html.twig', [
-                'user' => $this->user,
+                'user' => $user,
             ]);
         }
 
