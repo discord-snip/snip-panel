@@ -6,7 +6,7 @@ on:
     branches: [ master ]
 
 jobs:
-  deploy:
+  CI:
     runs-on: ubuntu-latest
     steps:
       - name: Connect via SSH
