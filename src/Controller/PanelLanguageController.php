@@ -53,7 +53,7 @@ class PanelLanguageController extends AbstractController
         $this->languageRepository = $languageRepository;
     }
 
-    #[Route('/panel/languages', name: 'panel_language')]
+    #[Route('/panel/languages', name: 'language_panel')]
     public function language(): Response
     {
         $session = $this->requestStack->getSession();
@@ -110,7 +110,7 @@ class PanelLanguageController extends AbstractController
                     $this->entityManager->flush();
                     $this->addFlash('success', 'Language has been updated!');
 
-                    return $this->redirectToRoute('panel_language');
+                    return $this->redirectToRoute('language_panel');
                 }
 
                 return $this->render('panel_language/edit.html.twig', [
@@ -156,7 +156,7 @@ class PanelLanguageController extends AbstractController
                     $this->entityManager->flush();
                     $this->addFlash('success', 'New language added!');
 
-                    return $this->redirectToRoute('panel_language');
+                    return $this->redirectToRoute('language_panel');
                 }
 
                 return $this->render('panel_language/add.html.twig', [

@@ -53,7 +53,7 @@ class PanelSnippetController extends AbstractController
         $this->snippetRepository = $snippetRepository;
     }
 
-    #[Route('/panel/snippets', name: 'panel_snippet')]
+    #[Route('/panel/snippets', name: 'snippet_panel')]
     public function language(): Response
     {
         $session = $this->requestStack->getSession();
@@ -122,7 +122,7 @@ class PanelSnippetController extends AbstractController
         ]));
     }
 
-    #[Route('/panel/snippet/{snippet}/edit', name: 'edit_snippet')]
+    #[Route('/panel/snippet/{snippet}/edit', name: 'snippet_edit')]
     public function edit(Snippet $snippet, Request $request): Response
     {
         $session = $this->requestStack->getSession();
