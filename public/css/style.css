@@ -4,10 +4,7 @@
 @import url(animations.css);
 
 :root {
-    --background: #36393f;
-    --snippet-background: #2f3136;
-    --snippet-border: #202225;
-    --background-profile: #292b2f;
+    --background: #212529;
     --color: #ffffff;
     --color-dimmed: #a0a0a0;
     --discord: #5865f2;
@@ -27,29 +24,13 @@ a {
     color: currentColor;
 }
 
-td, th {
-    padding: 1em;
-}
-
-tr:nth-child(even) {
-    background-color: var(--snippet-background);
-}
-
-tr:hover {
-    background-color: var(--snippet-border);
-}
-
 i.fab.fa-discord {
     font-size: 2em;
     margin-right: 0.5em;
 }
 
-.discriminator {
-    color: var(--color-dimmed)
-}
-
 nav {
-    background-color: var(--snippet-background);
+    background-color: var(--background);
     text-align: right;
     padding: 1em;
     position: -webkit-sticky;
@@ -83,10 +64,6 @@ nav > a > img {
 
 nav > a > img:last-child {
     margin-left: 0.5em;
-}
-
-img.avatar {
-    border-radius: 100%;
 }
 
 .discord {
@@ -157,12 +134,8 @@ header + main > div:not(:first-child) {
     margin-top: 10em;
 }
 
-header + main > div:nth-child(odd) > img {
+header + main > div > img {
     margin-right: 4em;
-}
-
-header + main > div:nth-child(even) > img {
-    margin-left: 4em;
 }
 
 header + main > div > p {
@@ -177,35 +150,6 @@ header + main > div p:first-of-type {
     font-size: 2em;
 }
 
-.contributors {
-    width: 60%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-}
-
-.contributors > .contributor {
-    display: inline-flex;
-    width: 30%;
-    align-items: center;
-    height: 5em;
-}
-
-.contributors > .contributor:hover {
-    background-color: var(--background-profile);
-}
-
-.contributors > .contributor > img {
-    height: 3em;
-    border-radius: 100%;
-    margin: 0 2em;
-}
-
-.contributors > .contributor > div {
-    display: inline-flex;
-    justify-content: center;
-}
-
 main {
     margin: 1em;
     min-height: 90%;
@@ -214,7 +158,7 @@ main {
 footer {
     margin: 0;
     padding: 5em 1em;
-    background-color: var(--snippet-border);
+    background-color: var(--background);
 }
 
 @media screen and (max-width: 767px) {
@@ -237,18 +181,6 @@ footer {
 
     header + main > div > p {
         width: 100%;
-    }
-
-    .contributors {
-        width: 100%;
-    }
-
-    .contributors > .contributor {
-        width: 90%;
-    }
-
-    .contributors > .contributor:hover {
-        background-color: unset;
     }
 }
 
