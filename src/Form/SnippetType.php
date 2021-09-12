@@ -25,6 +25,7 @@ class SnippetType extends AbstractType
                 'label' => 'Language',
                 'class' => Language::class,
                 'choice_label' => 'name',
+                'placeholder' => 'Choose language...',
             ])
             ->add('code', TextareaType::class, [
                 'label' => 'Code',
