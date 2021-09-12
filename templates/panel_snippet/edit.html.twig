@@ -8,6 +8,7 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
     <div class="mb-3">
+        <a class="btn btn-outline-primary" href="{{ path('snippet_details', {'snippet': snippet.id}) }}">Cancel</a>
         <button type="submit" class="btn btn-success">Update</button>
     </div>
     {{ form_end(form) }}
