@@ -9,7 +9,8 @@
         <pre><code class="{{ snippet.language.name }}">{{ snippet.code }}</code></pre>
         <div>
             <a class="btn btn-outline-primary" href="{{ path('panel') }}">Back to panel</a>
-            <a class="btn btn-primary" href="{{ path('snippet_edit', {'snippet': snippet.id}) }}">Edit</a>
+            <a class="btn btn-primary ms-1" href="{{ path('snippet_edit', {'snippet': snippet.id}) }}">Edit</a>
+            <a class="btn btn-danger ms-1" href="{{ path('snippet_delete', {'snippet': snippet.id}) }}">Delete</a>
         </div>
     </div>
 {% endblock %}
