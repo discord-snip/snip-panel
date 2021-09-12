@@ -69,7 +69,7 @@ class PanelSnippetController extends AbstractController
             if ($this->contributor['hasAccess']) {
                 $snippets = $this->snippetRepository->findAll();
 
-                return $this->render('panel/index.html.twig', [
+                return $this->render('panel_snippet/index.html.twig', [
                     'user' => $this->user,
                     'snippets' => $snippets,
                 ]);
@@ -103,7 +103,7 @@ class PanelSnippetController extends AbstractController
             }
 
             if ($this->contributor['hasAccess']) {
-                return $this->render('panel_snippet/index.html.twig', [
+                return $this->render('panel_snippet/details.html.twig', [
                     'snippet' => $snippet,
                 ]);
             }
@@ -149,6 +149,52 @@ class PanelSnippetController extends AbstractController
                 }
 
                 return $this->render('panel_snippet/edit.html.twig', [
+                    'snippet' => $snippet,
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            return $this->render('panel/forbidden.html.twig', [
+                'user' => $this->user,
+            ]);
+        }
+
+        // Fallback to default action - redirect to Discord Oauth2
+        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
+            'client_id' => self::OAUTH2_CLIENT_ID,
+            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'response_type' => 'code',
+            'scope' => 'identify',
+        ]));
+    }
+
+    #[Route('/panel/snippet/{snippet}/delete', name: 'snippet_delete')]
+    public function delete(Snippet $snippet, Request $request): Response
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+        if ($session->get('access_token', false)) {
+            try {
+                $this->user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
+                $this->contributor = $this->authenticationService->checkPermissions($this->user['id']);
+            } catch (\JsonException $e) {
+                die($e->getMessage());
+            }
+
+            if ($this->contributor['hasAccess']) {
+                $form = $this->createFormBuilder()
+                    ->getForm();
+
+                $form->handleRequest($request);
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $this->entityManager->remove($snippet);
+                    $this->entityManager->flush();
+                    $this->addFlash('success', 'Snippet has been removed!');
+
+                    return $this->redirectToRoute('snippet_panel');
+                }
+
+                return $this->render('panel_snippet/delete.html.twig', [
                     'snippet' => $snippet,
                     'form' => $form->createView(),
                 ]);
