@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use App\Repository\SnippetRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=SnippetRepository::class)
@@ -15,9 +15,9 @@ class Snippet
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid")
+     * @ORM\Column(type="string", length=36)
      */
-    private Uuid $id;
+    private string $id;
 
     /**
      * @ORM\Column(type="string", length=200)
@@ -37,10 +37,10 @@ class Snippet
 
     public function __construct()
     {
-        $this->id = Uuid::v4();
+        $this->id = Uuid::uuid4()->toString();
     }
 
-    public function getId(): Uuid
+    public function getId(): string
     {
         return $this->id;
     }
