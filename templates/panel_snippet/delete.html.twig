@@ -3,7 +3,6 @@
 {% block title %}Hello PanelController!{% endblock %}
 
 {% block body %}
-<div class="container">
     <h1>Delete <code>{{ snippet.name }}</code> snippet in {{ snippet.language.name }}</h1>
     <p>This operation cannot be undone, are You sure?</p>
     {{ form_start(form) }}
@@ -11,5 +10,4 @@
         <button type="submit" class="btn btn-danger">Delete</button>
     </div>
     {{ form_end(form) }}
-</div>
 {% endblock %}

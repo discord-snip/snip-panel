@@ -3,23 +3,22 @@
 {% block title %}Hello PanelController!{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1 class="mb-4 text-center">Access forbidden</h1>
+    <h1 class="mb-4 text-center">Access forbidden</h1>
 
-        <div class="alert-danger rounded p-4 mb-4">
-            <h2 class="mb-4">This is what happened</h2>
-            <p class="mb-0">You are not a Snip contributor, but You tried to access moderation panel.</p>
-        </div>
+    <div class="alert-danger rounded p-4 mb-4">
+        <h2 class="mb-4">This is what happened</h2>
+        <p class="mb-0">You are not a Snip contributor, but You tried to access moderation panel.</p>
+    </div>
 
-        <div class="alert-success rounded p-4 mb-4">
-            <h2 class="mb-4">Solution</h2>
-            <p class="mb-0">Join our Discord server and ask for <cite>Contributor</cite> role.</p>
-        </div>
+    <div class="alert-success rounded p-4 mb-4">
+        <h2 class="mb-4">Solution</h2>
+        <p class="mb-0">Join our Discord server and ask for <cite>Contributor</cite> role.</p>
+    </div>
 
-        <div class="p-4 mb-4">
-            <p class="text-center mt-6">Logged in as {{ user.username }}<span class="text-muted">#{{ user.discriminator }}</span>.
-                It's not You?</p>
-            <p class="text-center"><a class="btn btn-primary" href="{{ path('logout') }}">Logout!</a></p>
-        </div>
+    <div class="p-4 mb-4">
+        <p class="text-center mt-6">Logged in as {{ user.username }}<span
+                    class="text-muted">#{{ user.discriminator }}</span>.
+            It's not You?</p>
+        <p class="text-center"><a class="btn btn-primary" href="{{ path('logout') }}">Logout!</a></p>
     </div>
 {% endblock %}

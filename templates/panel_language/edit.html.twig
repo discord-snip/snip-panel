@@ -3,7 +3,6 @@
 {% block title %}Hello PanelController!{% endblock %}
 
 {% block body %}
-<div class="container">
     <script>hljs.highlightAll();</script>
     <h1>Edit <code>{{ language.name }}</code> language</h1>
     {{ form_start(form) }}
@@ -12,5 +11,4 @@
         <button type="submit" class="btn btn-primary">Save</button>
     </div>
     {{ form_end(form) }}
-</div>
 {% endblock %}

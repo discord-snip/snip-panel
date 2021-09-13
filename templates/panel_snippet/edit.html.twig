@@ -3,7 +3,6 @@
 {% block title %}Hello PanelController!{% endblock %}
 
 {% block body %}
-<div class="container">
     <h1>Edit <code>{{ snippet.name }}</code> snippet in {{ snippet.language.name }}</h1>
     {{ form_start(form) }}
     {{ form_widget(form) }}
@@ -12,5 +11,4 @@
         <button type="submit" class="btn btn-success">Update</button>
     </div>
     {{ form_end(form) }}
-</div>
 {% endblock %}
