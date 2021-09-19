@@ -45,24 +45,6 @@ class PanelController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->start();
 
-        if ($request->query->has('code')) {
-            try {
-                $token = $this->discordService->apiRequest(self::OAUTH2_TOKEN_URL, [
-                    'grant_type' => 'authorization_code',
-                    'client_id' => self::OAUTH2_CLIENT_ID,
-                    'client_secret' => $this->getParameter('discord.oauth2_client_secret'),
-                    'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'code' => $request->query->get('code'),
-                ]);
-            } catch (\JsonException $e) {
-                die($e->getMessage());
-            }
-
-            $session->set('access_token', $token['access_token']);
-
-            return $this->redirectToRoute('panel');
-        }
-
         if ($session->get('access_token', false)) {
             try {
                 $user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
@@ -81,9 +63,40 @@ class PanelController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
+        return $this->redirectToRoute('login');
+    }
+
+    #[Route('/panel/login', name: 'login', priority: 10)]
+    public function login(Request $request): Response
+    {
+        $session = $this->requestStack->getSession();
+        $session->start();
+
+        if ($request->query->has('code')) {
+            try {
+                $token = $this->discordService->apiRequest(self::OAUTH2_TOKEN_URL, [
+                    'grant_type' => 'authorization_code',
+                    'client_id' => self::OAUTH2_CLIENT_ID,
+                    'client_secret' => $this->getParameter('discord.oauth2_client_secret'),
+                    'redirect_uri' => $this->generateUrl('login', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'code' => $request->query->get('code'),
+                ]);
+            } catch (\JsonException $e) {
+                die($e->getMessage());
+            }
+            $session->set('access_token', $token['access_token']);
+
+            return $this->redirectToRoute('panel');
+        }
+
+        if ($session->get('access_token', false)) {
+            return $this->redirectToRoute('panel');
+        }
+
+        // Fallback to default action - redirect to Discord Oauth2
         return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
             'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'redirect_uri' => $this->generateUrl('login', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'response_type' => 'code',
             'scope' => 'identify',
         ]));

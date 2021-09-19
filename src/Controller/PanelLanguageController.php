@@ -15,14 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PanelLanguageController extends AbstractController
 {
-    private const OAUTH2_CLIENT_ID = '866013874109284402';
-
-    private const OAUTH2_URL = 'https://discordapp.com/api/oauth2/authorize';
-
     private const DISCORD_API_URL = 'https://discordapp.com/api';
 
     private ?array $user = null;
@@ -81,16 +76,11 @@ class PanelLanguageController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
-        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
-            'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'response_type' => 'code',
-            'scope' => 'identify',
-        ]));
+        return $this->redirectToRoute('login');
     }
 
     #[Route('/panel/language/{language}/edit', name: 'language_edit')]
-    public function languageEdit(Request $request, Language $language): Response
+    public function edit(Request $request, Language $language): Response
     {
         $session = $this->requestStack->getSession();
         $session->start();
@@ -125,16 +115,11 @@ class PanelLanguageController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
-        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
-            'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'response_type' => 'code',
-            'scope' => 'identify',
-        ]));
+        return $this->redirectToRoute('login');
     }
 
     #[Route('/panel/language/add', name: 'language_add')]
-    public function languageAdd(Request $request): Response
+    public function add(Request $request): Response
     {
         $session = $this->requestStack->getSession();
         $session->start();
@@ -171,11 +156,6 @@ class PanelLanguageController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
-        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
-            'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'response_type' => 'code',
-            'scope' => 'identify',
-        ]));
+        return $this->redirectToRoute('login');
     }
 }

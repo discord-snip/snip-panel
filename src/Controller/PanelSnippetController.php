@@ -15,14 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PanelSnippetController extends AbstractController
 {
-    private const OAUTH2_CLIENT_ID = '866013874109284402';
-
-    private const OAUTH2_URL = 'https://discordapp.com/api/oauth2/authorize';
-
     private const DISCORD_API_URL = 'https://discordapp.com/api';
 
     private ?array $user = null;
@@ -54,10 +49,11 @@ class PanelSnippetController extends AbstractController
     }
 
     #[Route('/panel/snippets', name: 'snippet_panel')]
-    public function language(): Response
+    public function snippet(): Response
     {
         $session = $this->requestStack->getSession();
         $session->start();
+
         if ($session->get('access_token', false)) {
             try {
                 $this->user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
@@ -81,12 +77,7 @@ class PanelSnippetController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
-        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
-            'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'response_type' => 'code',
-            'scope' => 'identify',
-        ]));
+        return $this->redirectToRoute('login');
     }
 
     #[Route('/panel/snippet/{snippet}/details', name: 'snippet_details')]
@@ -94,6 +85,7 @@ class PanelSnippetController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $session->start();
+
         if ($session->get('access_token', false)) {
             try {
                 $this->user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
@@ -114,12 +106,7 @@ class PanelSnippetController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
-        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
-            'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'response_type' => 'code',
-            'scope' => 'identify',
-        ]));
+        return $this->redirectToRoute('login');
     }
 
     #[Route('/panel/snippet/{snippet}/edit', name: 'snippet_edit')]
@@ -127,6 +114,7 @@ class PanelSnippetController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $session->start();
+
         if ($session->get('access_token', false)) {
             try {
                 $this->user = $this->discordService->apiRequest(self::DISCORD_API_URL . '/users/@me');
@@ -160,12 +148,7 @@ class PanelSnippetController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
-        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
-            'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'response_type' => 'code',
-            'scope' => 'identify',
-        ]));
+        return $this->redirectToRoute('login');
     }
 
     #[Route('/panel/snippet/{snippet}/delete', name: 'snippet_delete')]
@@ -206,12 +189,7 @@ class PanelSnippetController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
-        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
-            'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'response_type' => 'code',
-            'scope' => 'identify',
-        ]));
+        return $this->redirectToRoute('login');
     }
 
     #[Route('/panel/snippet/add', name: 'snippet_add')]
@@ -254,11 +232,6 @@ class PanelSnippetController extends AbstractController
         }
 
         // Fallback to default action - redirect to Discord Oauth2
-        return $this->redirect(self::OAUTH2_URL . '?' . http_build_query([
-            'client_id' => self::OAUTH2_CLIENT_ID,
-            'redirect_uri' => $this->generateUrl('panel', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'response_type' => 'code',
-            'scope' => 'identify',
-        ]));
+        return $this->redirectToRoute('login');
     }
 }
