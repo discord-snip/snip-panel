@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class NotFoundTest extends WebTestCase
 {
-    public function testSomething(): void
+    public function testFetchingSnippet(): void
     {
         $client = static::createClient();
 
