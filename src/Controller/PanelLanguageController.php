@@ -62,7 +62,7 @@ class PanelLanguageController extends AbstractController
             }
 
             if ($this->contributor['hasAccess']) {
-                $languages = $this->languageRepository->findAll();
+                $languages = $this->languageRepository->findBy([], ['name' => 'ASC']);
 
                 return $this->render('panel_language/index.html.twig', [
                     'user' => $this->user,
